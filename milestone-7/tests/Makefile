@@ -32,6 +32,7 @@ SRC_test_ap_candidates     := src/wireless_setup.cpp
 SRC_test_audio_acks        := src/audio/audio_acks.cpp
 SRC_test_audio_channels    :=
 SRC_test_audio_config      := src/audio/config.cpp
+SRC_test_bt_auto_source    := src/audio/bt_audio.cpp src/audio/config.cpp
 SRC_test_audio_format      := src/sdr_builder.cpp
 SRC_test_audio_mixer       := src/audio/mixer.cpp src/audio/playout.cpp src/audio/drift.cpp src/audio/stream_rate.cpp
 SRC_test_audio_route       := src/audio/audio_route.cpp
@@ -113,13 +114,19 @@ ARGS_test_j29_golden  := tests/fixtures/j29_golden.txt
 TESTS := $(patsubst SRC_%,%,$(filter SRC_test_%,$(.VARIABLES)))
 
 .PHONY: all check tsan clean $(TESTS) $(addprefix run-,$(TESTS)) run-test_media_payload run-test_aa_proto32 run-test_schema
+.PHONY: run-test_bt_auto_source_resources
 all: $(TESTS)
 
-check: $(addprefix run-,$(TESTS)) run-test_aa_proto32 run-test_media_payload run-test_schema tsan
+check: $(addprefix run-,$(TESTS)) run-test_bt_auto_source_resources run-test_aa_proto32 run-test_media_payload run-test_schema tsan
 	@echo "[CHECK] all host tests passed"
 
 $(OUT):
 	@mkdir -p $(OUT)
+
+# Hardware ports are replaced only for this test; actual BtAudio/config sources are compiled.
+$(OUT)/test_bt_auto_source: CXXFLAGS := -Ibt_fake $(CXXFLAGS)
+run-test_bt_auto_source_resources:
+	@python3 test_bt_auto_source_resources.py
 
 # speexdsp object, shared by the tests that need it (plain and TSAN builds).
 $(OUT)/speex.o: $(SPEEX) | $(OUT)
