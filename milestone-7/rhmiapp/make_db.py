@@ -24,6 +24,7 @@ TEXTS = {1: "Android Auto", 2: "Android Auto: Connecting...",   # 2 = entry text
          45: "Version",                               # rhmiapp-55 to say what it does across cluster + HUD
          46: "Show directions at any distance",       # 45 = Version row/page title, 46 = the "at any distance" box
          47: "Disable logging (performance test)",     # 47 = no-log checkbox (rhmiapp-56); env NBT_NO_LOG wins
+         49: "Automatically switch audio source to Bluetooth when Android Auto connects",
          48: "Prompts on car radio (BT, beta)",     # 48 = BT speech checkbox (rhmiapp-66)
          # 400 / 404-406 = the gauge cluster type row, page title and its three choices.
          400: "Gauge cluster type",
@@ -64,6 +65,24 @@ LANG_TEXTS = {
 }
 LANG_TEXTS["es-US"] = LANG_TEXTS["es-ES"]
 LANG_TEXTS["fr-CA"] = LANG_TEXTS["fr-FR"]
+
+# Automatic media source selection: every supported locale has an explicit translation.
+BT_AUTO_SOURCE_TEXTS = {
+    "de": "Beim Verbinden von Android Auto automatisch zur Bluetooth-Audioquelle wechseln",
+    "en-UK": "Automatically switch audio source to Bluetooth when Android Auto connects",
+    "en-US": "Automatically switch audio source to Bluetooth when Android Auto connects",
+    "es-ES": "Cambiar automáticamente la fuente de audio a Bluetooth al conectar Android Auto",
+    "es-US": "Cambiar automáticamente la fuente de audio a Bluetooth al conectar Android Auto",
+    "fr-FR": "Basculer automatiquement la source audio sur Bluetooth à la connexion d’Android Auto",
+    "fr-CA": "Basculer automatiquement la source audio sur Bluetooth à la connexion d’Android Auto",
+    "it": "Passa automaticamente alla sorgente audio Bluetooth quando Android Auto si connette",
+    "pt": "Mudar automaticamente a fonte de áudio para Bluetooth ao ligar o Android Auto",
+    "ru": "Автоматически переключать источник звука на Bluetooth при подключении Android Auto",
+    "pl": "Automatycznie przełączaj źródło na Bluetooth po połączeniu Android Auto"
+}
+for lang, text in BT_AUTO_SOURCE_TEXTS.items():
+    LANG_TEXTS.setdefault(lang, {})[49] = text
+
 with zipfile.ZipFile(os.path.join(HERE, "NbtAad_ALL_Texts.zip"), "w", zipfile.ZIP_DEFLATED) as z:
     for lang, langname in LANGS.items():
         texts = dict(TEXTS)
